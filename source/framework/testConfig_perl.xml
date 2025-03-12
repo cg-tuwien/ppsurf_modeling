@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edge-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="edge-definition.xsd" version="0.2">
+  <edge type="regular">
+    <name>Convert meshes</name>
+    <description>Converts meshes in other format using trimesh</description>
+    <inputDir>D:\datasets\p2s\minimal\00_base_meshes</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\01_base_meshes_ply</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\convert_mesh.py</call>
+    <parameters>
+      <option name="-t" value=".ply"/>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Clean meshes</name>
+    <description>Clean the meshes with trimesh</description>
+    <inputDir>D:\datasets\p2s\minimal\01_base_meshes_ply</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\02_meshes_cleaned</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\clean_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Scale meshes</name>
+    <description>Scale the meshes with trimesh</description>
+    <inputDir>D:\datasets\p2s\minimal\02_meshes_cleaned</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\03_meshes</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\scale_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Sample Blensor</name>
+    <description>Sample the meshes with blensor</description>
+    <inputDir>D:\datasets\p2s\minimal\03_meshes</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\04_blensor_py</outputDir>
+    <outputDir>D:\datasets\p2s\minimal\04_pts</outputDir>
+    <outputDir>D:\datasets\p2s\minimal\04_pts_vis</outputDir>
+    <outputDir>D:\datasets\p2s\minimal\04_pcd</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\sample_blensor.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Get query dist</name>
+    <description>Get query dist</description>
+    <inputDir>D:\datasets\p2s\minimal\03_meshes</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\05_query_dist</outputDir>
+    <outputDir>D:\datasets\p2s\minimal\05_query_pts</outputDir>
+    <outputDir>D:\datasets\p2s\minimal\05_patch_vis</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\get_query_dist.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="unique" require_complete="true">
+    <name>Make dataset splits</name>
+    <description>Make dataset splits</description>
+    <inputDir>D:\datasets\p2s\minimal\05_query_pts</inputDir>
+    <outputDir>D:\datasets\p2s\minimal\final</outputDir>
+    <call>python C:\Users\pherl\repos\meshnet_dataset_framework\source\framework\make_dataset\make_dataset_splits.py</call>
+    <parameters>
+      <argument type="output"/>
+      <argument value="D:\datasets\p2s\minimal\05_query_pts"/>
+    </parameters>
+  </edge>
+</edge-set>

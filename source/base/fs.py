@@ -1,6 +1,13 @@
 import typing
 import os
 
+def filename_to_hash(file_path):
+    import hashlib
+    if not os.path.isfile(file_path):
+        raise ValueError('Path does not point to a file: {}'.format(file_path))
+    hash_input = os.path.basename(file_path).split('.')[0]
+    hash = int(hashlib.md5(hash_input.encode()).hexdigest(), 16) % (2**32 - 1)
+    return hash
 
 def create_activate_env(env_name: str):
     import subprocess

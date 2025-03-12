@@ -1,0 +1,52 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[[source]]
+url = "https://download.pytorch.org/whl/cu124"
+verify_ssl = true
+name = "downloadpytorch"
+
+[[source]]
+name = "pyg"
+verify_ssl = true
+url = "https://data.pyg.org/whl/torch-2.4.0+cu124.html"
+
+[packages]
+autopep8 = "*"
+ipykernel = "*"
+jsonargparse = {extras = ["signatures"], version = ">=4.27.7"}
+laspy = "2.5.4"
+Levenshtein = "0.27.1"
+lightning = "==2.4.0"
+matplotlib = "*"
+openpyxl = "3.0.9"
+overrides = "*"
+pandas = "*"
+pyarrow = "*"
+pydevd = "*"
+pyg_lib = "0.4.0"
+pykdtree = "1.4.1"
+pytorch-lightning = "==2.4.0"
+scikit-image = "0.25.2"
+scikit-learn = "*"
+scipy = "1.15.2"
+tensorboard = "*"
+torch = {version = "==2.4.1", index = "downloadpytorch"}
+torch_cluster = "1.6.3"
+torch_geometric = "2.6.1"
+torch_scatter = "2.1.2"
+torch_sparse = "0.6.18"
+torch_spline_conv = "1.2.2"
+torchaudio = {version = "*", index = "downloadpytorch"}
+torchvision = {version = "*", index = "downloadpytorch"}
+tqdm = "*"
+trimesh = "4.6.4"
+xmlschema = "3.4.3"
+
+[dev-packages]
+torch-tb-profiler = "*"
+
+[requires]
+python_version = "3.12"

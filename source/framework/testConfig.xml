@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edge-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="edge-definition.xsd" version="0.2">
+  <configuration>
+    <folder name="data">C:\Users\Maximilian\Desktop\Test</folder>
+    <folder name="scripts">C:\Users\Maximilian\Desktop\BA-Repo\source\framework\make_dataset</folder>
+  </configuration>
+
+  <edge type="regular">
+    <name>Convert meshes</name>
+    <description>Converts meshes in other format using trimesh</description>
+    <inputDir useFolder="data">00_base_meshes</inputDir>
+    <outputDir useFolder="data">01_base_meshes_ply</outputDir>
+    <call useFolder="scripts">python {}\convert_mesh.py</call>
+    <parameters>
+      <option name="-t" value=".ply"/>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Clean meshes</name>
+    <description>Clean the meshes with trimesh</description>
+    <inputDir useFolder="data">01_base_meshes_ply</inputDir>
+    <outputDir useFolder="data">02_meshes_cleaned</outputDir>
+    <call useFolder="scripts">python {}\clean_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Scale meshes</name>
+    <description>Scale the meshes with trimesh</description>
+    <inputDir useFolder="data">02_meshes_cleaned</inputDir>
+    <outputDir useFolder="data">03_meshes</outputDir>
+    <call useFolder="scripts">python {}\scale_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Sample Blensor</name>
+    <description>Sample the meshes with blensor</description>
+    <inputDir useFolder="data">03_meshes</inputDir>
+    <outputDir useFolder="data">04_blensor_py</outputDir>
+    <outputDir useFolder="data">04_pts</outputDir>
+    <outputDir useFolder="data">04_pts_vis</outputDir>
+    <outputDir useFolder="data">04_pcd</outputDir>
+    <call useFolder="scripts">python {}\sample_blensor.py</call>
+    <parameters>
+      <argument value="C:\Users\Maximilian\Desktop\blensor_win\blender.exe"/>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Get query dist</name>
+    <description>Get query dist</description>
+    <inputDir useFolder="data">03_meshes</inputDir>
+    <outputDir useFolder="data">05_query_dist</outputDir>
+    <outputDir useFolder="data">05_query_pts</outputDir>
+    <outputDir useFolder="data">05_patch_vis</outputDir>
+    <call useFolder="scripts">python {}\get_query_dist.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="unique" require_complete="true">
+    <name>Make dataset splits</name>
+    <description>Make dataset splits</description>
+    <inputDir useFolder="data">05_query_pts</inputDir>
+    <outputDir useFolder="data">final</outputDir>
+    <call useFolder="scripts">python {}\make_dataset_splits.py</call>
+    <parameters>
+      <argument type="output"/>
+      <argument useFolder="data" value="{}\05_query_pts"/>
+    </parameters>
+  </edge>
+</edge-set>

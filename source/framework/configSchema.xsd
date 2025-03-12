@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1">
+  <xsd:element name="edge-set">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="configuration" minOccurs="0" maxOccurs="1" type="configurationType"/>
+        <xsd:element name="edge" minOccurs="0" maxOccurs="unbounded" type="edgeType"/>
+      </xsd:sequence>
+      <xsd:attribute name="version" type="versionNumber" default="0.1"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="configurationType">
+    <xsd:sequence>
+      <xsd:element name="folder" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="edgeType">
+    <xsd:sequence>
+      <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+      <xsd:element name="description" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+      <xsd:element name="inputDir" minOccurs="1" maxOccurs="unbounded" type="stringWithFolderPlaceholder"/>
+      <xsd:element name="outputDir" minOccurs="1" maxOccurs="unbounded" type="stringWithFolderPlaceholder"/>
+      <xsd:element name="call" minOccurs="1" maxOccurs="1" type="stringWithFolderPlaceholder"/>
+      <xsd:element name="parameters" minOccurs="1" maxOccurs="1" type="parametersType"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="edgeCategory" default="regular"/>
+    <xsd:attribute name="require_complete" type="xsd:boolean"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="stringWithFolderPlaceholder">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="useFolder" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="parametersType">
+    <xsd:all>
+      <xsd:element name="option" minOccurs="0" maxOccurs="unbounded" type="optionType"/>
+      <xsd:element name="argument" minOccurs="0" maxOccurs="unbounded" type="argumentType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="optionType">
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="type" type="typeType"/>
+    <xsd:attribute name="useFolder" type="xsd:string"/>
+    <xsd:attribute name="value" type="xsd:string" default=""/>
+    <xsd:assert test="(@type and not(@value)) or (not(@type) and @value) or (not(@type) and not(@value))"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="argumentType">
+    <xsd:attribute name="type" type="typeType"/>
+    <xsd:attribute name="useFolder" type="xsd:string"/>
+    <xsd:attribute name="value" type="xsd:string" default=""/>
+    <xsd:assert test="(@type and not(@value)) or (not(@type) and @value)"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="typeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="input"/>
+      <xsd:enumeration value="output"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="versionNumber">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9].[0-9]"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="edgeCategory">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="regular"/>
+      <xsd:enumeration value="unique"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

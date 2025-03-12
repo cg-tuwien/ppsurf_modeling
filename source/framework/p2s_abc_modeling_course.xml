@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edge-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="configSchema.xsd" version="0.2">
+  <configuration>
+    <folder name="data">datasets/abc_modeling_course</folder>
+    <folder name="scripts">source/framework/make_dataset</folder>
+  </configuration>
+
+  <edge type="regular">
+    <name>Convert meshes</name>
+    <description>Converts meshes in other format using trimesh</description>
+    <inputDir useFolder="data">00_base_meshes</inputDir>
+    <outputDir useFolder="data">01_base_meshes_ply</outputDir>
+    <call useFolder="scripts">python {}/convert_mesh.py</call>
+    <parameters>
+      <option name="-t" value=".ply"/>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Clean meshes</name>
+    <description>Clean the meshes with trimesh</description>
+    <inputDir useFolder="data">01_base_meshes_ply</inputDir>
+    <outputDir useFolder="data">02_meshes_cleaned</outputDir>
+    <call useFolder="scripts">python {}/clean_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Scale meshes</name>
+    <description>Scale the meshes with trimesh</description>
+    <inputDir useFolder="data">02_meshes_cleaned</inputDir>
+    <outputDir useFolder="data">03_meshes</outputDir>
+    <call useFolder="scripts">python {}/scale_mesh.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Sample Surface</name>
+    <description>Sample Surface</description>
+    <inputDir useFolder="data">03_meshes</inputDir>
+    <outputDir useFolder="data">04_pts</outputDir>
+    <outputDir useFolder="data">04_pts_vis</outputDir>
+    <call useFolder="scripts">python {}/sample_surface.py</call>
+    <parameters>
+      <option name="--num_samples" value="25000"/>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="regular">
+    <name>Get query dist</name>
+    <description>Get query dist</description>
+    <inputDir useFolder="data">03_meshes</inputDir>
+    <outputDir useFolder="data">05_query_dist</outputDir>
+    <outputDir useFolder="data">05_query_pts</outputDir>
+    <outputDir useFolder="data">05_patch_vis</outputDir>
+    <call useFolder="scripts">python {}/get_query_dist.py</call>
+    <parameters>
+      <argument type="input"/>
+      <argument type="output"/>
+      <argument type="output"/>
+      <argument type="output"/>
+    </parameters>
+  </edge>
+
+  <edge type="unique" require_complete="true">
+    <name>Make file list</name>
+    <description>Make file list</description>
+    <inputDir useFolder="data">04_pts</inputDir>
+    <outputDir useFolder="data">06_splits</outputDir>
+    <call useFolder="scripts">python {}/make_dataset_splits.py</call>
+    <parameters>
+      <option name="--seed" value="42"/>
+      <argument type="output"/>
+      <argument useFolder="data" value="{}/04_pts"/>
+    </parameters>
+  </edge>
+</edge-set>
