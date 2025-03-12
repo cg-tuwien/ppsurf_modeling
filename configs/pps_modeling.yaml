@@ -2,7 +2,9 @@ debug: False
 seed_everything: 42
 
 trainer:
-  max_epochs: 10
+#  max_epochs: 10  # 3 min
+#  max_epochs: 50  # 6 min
+  max_epochs: 150  # 15 min
   default_root_dir: 'models/pps_modeling'
   strategy: auto
   accelerator: gpu
@@ -59,7 +61,8 @@ model:
     gen_subsample_manifold: 10000
     gen_resolution_global: 129  # half resolution
 #    gen_resolution_global: 257
-    rec_batch_size: 25000  # half memory
+    rec_batch_size: 5000
+#    rec_batch_size: 25000  # half memory
 #    rec_batch_size: 50000
     gen_refine_iter: 10
     workers: 8

@@ -296,9 +296,9 @@ def get_metric_mesh_single_file(gt_mesh_file: str, mesh_file: str, num_samples: 
         metric_result = np.nan
         # raise FileExistsError()
     elif not os.path.isfile(gt_mesh_file):
-        raise FileExistsError()
+        raise FileExistsError('Ground truth mesh missing: {}'.format(gt_mesh_file))
     else:
-        raise NotImplementedError()
+        raise NotImplementedError('Unknown error')
 
     return metric_result
 
