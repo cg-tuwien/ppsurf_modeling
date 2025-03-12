@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <edge-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="configSchema.xsd" version="0.2">
   <configuration>
-    <folder name="data">datasets/abc_modeling_course</folder>
+    <folder name="data">datasets/abc_modeling</folder>
     <folder name="scripts">source/framework/make_dataset</folder>
   </configuration>
 

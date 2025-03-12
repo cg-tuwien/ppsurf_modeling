@@ -46,7 +46,7 @@ def get_pc_dir(in_file: str):
 def get_pc_file(in_file, shape_name):
     if in_file_is_dataset(in_file):
         dataset_dir = get_dataset_dir(in_file)
-        pc_file = os.path.join(dataset_dir, '04_pts_vis', shape_name + '.xyz.ply')
+        pc_file = os.path.join(dataset_dir, '04_pts_vis', shape_name, shape_name + '.xyz')
         return pc_file
     else:
         return in_file

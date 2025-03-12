@@ -1,1 +1,2 @@
-tensorboard --logdir="logs"
+pipenv shell
+tensorboard --logdir="models"

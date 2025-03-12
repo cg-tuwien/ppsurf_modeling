@@ -70,7 +70,7 @@ Deep Learning and other ML techniques work best when the input data is normalize
 1. Modify the marked code lines in [source/framework/make_dataset/scale_mesh.py](source/framework/make_dataset/scale_mesh.py). The bounding box of output mesh must be in [-0.5...+0.5], symmetric to the origin. 
    1. The output mesh must not be distorted, i.e. use only translation and uniform scaling. 
    1. Use vectorization of NumPy arrays. Do not iterate over the vertices.
-1. Describe the transformation steps and their order in the report. You will find the meshes as .ply in [datasets/abc_modeling_course/03_meshes](datasets/abc_modeling_course/03_meshes). You can check the correct scaling by opening them in Meshlab and using the measure tool.
+1. Describe the transformation steps and their order in the report. You will find the meshes as .ply in [datasets/abc_modeling_course/03_meshes](datasets/abc_modeling/03_meshes). You can check the correct scaling by opening them in Meshlab and using the measure tool.
 
 You should get a scaled mesh like this:
 
@@ -99,30 +99,29 @@ You should get a point cloud like this:
 ### Task 3 (10 Points): Train and Evaluate the Network
 
 The training uses PyTorch as backend. While training, only a minimal loss information is printed in the console. Additional loss curves and metrics can be seen via Tensorboard:
-1. Open Anaconda Prompt (anaconda3) and cd to the main directory
-1. Activate the virtual environment with "`conda activate p2s`"
-1. Start Tensorboard server with "`tensorboard --logdir logs`"
+1. Open a terminal in the repo root directory.
+1. Activate the virtual environment with "`pipenv shell`".
+1. Start Tensorboard server with "`tensorboard --logdir models`".
 1. Open http://localhost:6006/ in a browser. You should see curves like these (smoothing>=0.95):
 ![Tensorboard](images/tensorboard.png)
 Use these curves for your report.
 
-Run `full_run.py` to train and evaluate the network. Train for at least 3, better 10 epochs, where each epoch takes around 5 minutes on a GTX 1070 TI.
+Run [pps_modeling.py](pps_modeling.py) to train and evaluate the network. Train for at least 3, better 10 epochs, where each epoch takes around 5 minutes on a GTX 1070 TI.
 
-**GPU out-of-memory**: If your GPU runs out of memory, decrease the `batch_size`. 
+You can change hyperparameters in [configs/pps_modeling.yaml](configs/pps_modeling.yaml) or in [pps_modeling.py](pps_modeling.py). 
 
-**RAM out-of-memory / paging file**: Decrease the number of workers if you run out of RAM or get a paging-file error. Usually, PyCharm will also offer you to increase the page-file size when it runs out of space. 
-
-**Old GPU**: PyTorch dropped support for Compute Capability 3.5 in version 1.3.1. You may notice this issue by receiving the following error: "RuntimeError: CUDA error: no kernel image is available for execution on the device". Install the conda environment with the `p2s_cc35.yml` or modify your environment according to this file. We tested this with a Geforce 710. Additionally, you need to comment/uncomment two pairs of lines in `source/points_to_surf_train.py` marked with "# Older GPU, Pytorch<1.4" around line 500.
-
-**No GPU**:  If you don't have a GPU with CUDA support, install the conda environment with the `p2s_cpu.yml` or modify your environment according to this file. Uncomment the three `gpu_idx` settings in `full_run.py`. Expect around 10x longer training times.
+The most important ones are:
+- `trainer.accelerator`: Set to "CPU" if you don't have a supported GPU. Expect around 10x longer training times.
+- `data.batch_size`: Reduce if you run out of GPU memory.
+- `data.workers`: Number of workers for data loading. Reduce if you run out of RAM or get a paging file error. Set to `0` for faster debugging.
 
 After each run, you should copy the model (models) and results into a backup folder. Otherwise, they will be overwritten. Alternatively, you can change the model_name variable. If you want to run only the evaluation without re-training, comment out the line `points_to_surf_train.points_to_surf_train(train_opt)` in `full_run.py`. 
 
-The models will be saved in `models` and loss curves in `logs`. Reconstruction and evaluation outputs will be created in `results/modeling_course/abc_modeling_course/rec`. The `mesh` directory and `hausdorff_dist_pred_rec.csv` are the most interesting outputs. Use this data for your report.
+The models and loss logs will be saved in `models`. Reconstruction and evaluation outputs will be created in `results/modeling_course/abc_modeling/rec`. The `mesh` directory and `hausdorff_dist_pred_rec.csv` are the most interesting outputs. Use this data for your report.
 
 In supervised training, a loss function computes the error between the prediction and the GT data. A minor change can cause huge differences in accuracy.
 
-1. Run the training and evaluation with the given loss function (occupancy classification + absolute distance as described in the P2S paper) and note the resulting Chamfer distance.
+1. Run the training and evaluation with the given loss function (inside/outside classification) and note the resulting Chamfer distance.
 1. Switch the training of P2S to distance regression by swapping the commented versions of the `features` variable `full_run.py`. Re-train and evaluate the results.
 2. Remove the torch.tanh() in source/sdf_nn.py, functions calc_loss_magnitude() and post_process_magnitude(), re-train and note the evaluation changes.
 3. Describe the differences of the results in your report. Further, explain what the differences between the loss functions are, which ones are better and why.
@@ -137,9 +136,9 @@ You should get a reconstruction like this:
 To get a more realistic dataset, we want to simulate scanner noise. For this, you need to extend the point sampling method (Task 2) with a random offset in normal direction.
 
 1. Backup your previous dataset and clean the `04_pts` and `04_pts_vis` directories.
-1. Calculate normals for each face of the input mesh. You may use all Trimesh's functions.
-   1. For each point in the point cloud, find the closest face and get its normal    vector. Use e.g. Trimesh's proximity functions or a SciPy cKd-tree.
-   3. Apply a random offset (with Gaussian distribution) along the normals to the    points. Add a constant for the noise strength (1% of the bounding box as offset    is already a lot).
+1. Calculate normals for each face of the input mesh. You may use all of Trimesh's functions.
+   1. For each point in the point cloud, find the closest face and get its normal vector. Use e.g. Trimesh's proximity functions or a SciPy kD-tree.
+   3. Apply a random offset (with Gaussian distribution) along the normals to the points. Add a constant for the noise strength (1% of the bounding box as offset is already a lot).
 4. Re-train and evaluate the network.
 5. Explain your implementation and show the resulting changes in accuracy (with different noise strengths).
 
@@ -196,33 +195,6 @@ Using the *predict* sub-command will **not** download our pre-trained model. You
 python models/download_ppsurf_50nn.py
 ```
 
-Supported file formats are:
-- PLY, STL, OBJ and other mesh files loaded by [trimesh](https://github.com/mikedh/trimesh).  
-- XYZ as whitespace-separated text file, read by [NumPy](https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html). 
-Load first 3 columns as XYZ coordinates. All other columns will be ignored.
-- NPY and NPZ, read by [NumPy](https://numpy.org/doc/stable/reference/generated/numpy.load.html).
-NPZ assumes default key='arr_0'. All columns after the first 3 columns will be ignored.
-- LAS and LAZ (version 1.0-1.4), COPC and CRS loaded by [Laspy](https://github.com/laspy/laspy). 
-You may want to sub-sample large point clouds to ~250k points to avoid speed and memory issues.
-For detailed reconstruction, you'll need to extract parts of large point clouds.
-
-
-## Replicate Results
-
-Train, reconstruct and evaluate to replicate the main results (PPSurf 50NN) from the paper
-``` bash
-python full_run_pps.py
-```
-
-Training takes about 5 hours on 4 A40 GPUs. By default, training will use all available GPUs and CPUs.
-Reconstructing one object takes about 1 minute on a single A40. The test sets have almost 1000 objects in total. 
-
-Logging during training with Tensorboard is enabled by default. 
-We log the loss, accuracy, recall and F1 score for the sign prediction. 
-You can start a Tensorboard server with: 
-``` bash
-tensorboard --logdir models
-```
 
 
 ## Command Line Interface

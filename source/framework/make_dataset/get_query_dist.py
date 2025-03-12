@@ -49,7 +49,7 @@ def run(args):
     if args.input_mesh[-4:] != ".ply":
         exit(2)
 
-    debug = False
+    debug = True
     patch_radius = get_patch_radius(args.grid_resolution, args.epsilon)
     output_query_dist = os.path.join(args.output_query_dist, os.path.basename(args.input_mesh) + ".npy")
     output_query_pts = os.path.join(args.output_query_pts, os.path.basename(args.input_mesh) + ".npy")
@@ -78,7 +78,7 @@ def run(args):
 
     if debug and args.output_query_vis is not None:
         # save visualization
-        output_query_vis = os.path.join(args.output_query_vis, os.path.basename(args.input_mesh)[:-4] + ".npy")
+        output_query_vis = os.path.join(args.output_query_vis, os.path.basename(args.input_mesh)[:-4] + ".ply")
         sdf.visualize_query_points(query_pts_ms, query_dist_ms, output_query_vis)
 
 

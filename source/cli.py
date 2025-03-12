@@ -9,7 +9,10 @@ from tqdm import tqdm
 
 import pytorch_lightning.profilers
 from pytorch_lightning.cli import LightningCLI, Namespace, LightningArgumentParser
-from pytorch_lightning.callbacks import TQDMProgressBar
+from pytorch_lightning.callbacks import TQDMProgressBar, ModelCheckpoint
+from lightning_fabric.utilities.types import _PATH
+from typing import Optional, Literal, Dict
+from datetime import timedelta
 
 from source.base.profiling import get_now_str
 
@@ -19,6 +22,41 @@ class PPSProgressBar(TQDMProgressBar):  # disable validation prog bar
         bar_disabled = tqdm(disable=True)
         return bar_disabled
 
+class TorchScriptModelCheckpoint(ModelCheckpoint):
+
+    def __init__(
+        self,
+        dirpath: Optional[_PATH] = None,
+        filename: Optional[str] = None,
+        monitor: Optional[str] = None,
+        verbose: bool = False,
+        save_last: Optional[Literal[True, False, "link"]] = None,
+        save_top_k: int = 1,
+        save_weights_only: bool = False,
+        mode: str = "min",
+        auto_insert_metric_name: bool = True,
+        every_n_train_steps: Optional[int] = None,
+        train_time_interval: Optional[timedelta] = None,
+        every_n_epochs: Optional[int] = None,
+        save_on_train_epoch_end: Optional[bool] = None,
+        enable_version_counter: bool = True,
+    ):
+        super().__init__(
+            dirpath=dirpath,
+            filename=filename,
+            monitor=monitor,
+            verbose=verbose,
+            save_last=save_last,
+            save_top_k=save_top_k,
+            save_weights_only=save_weights_only,
+            mode=mode,
+            auto_insert_metric_name=auto_insert_metric_name,
+            every_n_train_steps=every_n_train_steps,
+            train_time_interval=train_time_interval,
+            every_n_epochs=every_n_epochs,
+            save_on_train_epoch_end=save_on_train_epoch_end,
+            enable_version_counter=enable_version_counter,
+        )
 
 class PPSProfiler(pytorch_lightning.profilers.PyTorchProfiler):
     def __init__(

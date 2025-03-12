@@ -346,9 +346,10 @@ class PocoDataset(torch_data.Dataset, EnforceOverrides):
         from source.occupancy_data_module import in_file_is_dataset
         normalize = not in_file_is_dataset(self.in_file)
 
+        shape_name = self.shape_names[shape_ind]
         shape_data = OccupancyDataModule.load_shape_data_pc(
             in_file=self.in_file, padding_factor=self.padding_factor,
-            shape_name=self.shape_names[shape_ind], normalize=normalize, return_kdtree=return_kdtree)
+            shape_name=shape_name, normalize=normalize, return_kdtree=return_kdtree)
         pts_ms_raw = shape_data['pts_ms']
 
         def sub_sample_point_cloud(pts: np.ndarray, normals: np.ndarray, num_target_pts: int):
@@ -364,8 +365,8 @@ class PocoDataset(torch_data.Dataset, EnforceOverrides):
         shape_data['normals_ms'] = normals_sub_sample
 
         query_pts_dir, query_dist_dir = get_training_data_dir(self.in_file)
-        imp_surf_query_filename = os.path.join(query_pts_dir, self.shape_names[shape_ind] + '.ply.npy')
-        imp_surf_dist_filename = os.path.join(query_dist_dir, self.shape_names[shape_ind] + '.ply.npy')
+        imp_surf_query_filename = os.path.join(query_pts_dir, shape_name, shape_name + '.ply.npy')
+        imp_surf_dist_filename = os.path.join(query_dist_dir, shape_name, shape_name + '.ply.npy')
 
         if os.path.isfile(imp_surf_query_filename):  # if GT data exists
             pts_query_ms = np.load(imp_surf_query_filename)
@@ -376,8 +377,9 @@ class PocoDataset(torch_data.Dataset, EnforceOverrides):
             if imp_surf_dist_ms.dtype != np.float32:
                 imp_surf_dist_ms = imp_surf_dist_ms.astype(np.float32)
         else:  # if no GT data
-            pts_query_ms = np.empty((0, 3), dtype=np.float32)
-            imp_surf_dist_ms = np.empty((0, 3), dtype=np.float32)
+            # pts_query_ms = np.empty((0, 3), dtype=np.float32)
+            # imp_surf_dist_ms = np.empty((0, 3), dtype=np.float32)
+            raise ValueError(f'No GT data for {shape_name}')
 
         # DDP sampler can't handle patches_per_shape, so we do it here
         from torch.cuda import device_count
