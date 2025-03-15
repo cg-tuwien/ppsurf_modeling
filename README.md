@@ -33,7 +33,7 @@ If you are familiar with other dependency managers and IDEs (e.g. VS Code, Eclip
    1. Windows Powershell: [Enable script execution via PS with admin rights](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5): `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. Then activate the virtual environment in a normal terminal with `.venv\Scripts\Activate.ps1`.
    2. Windows CMD: Run `.venv\Scripts\activate.bat`
    3. Linux: Run `.venv\Scripts\activate`
-1. Install all necessary dependencies with: `pip install -r requirements.txt -f https://data.pyg.org/whl/torch-2.4.0+cu124.html --extra-index-url https://download.pytorch.org/whl/cu124`
+1. Install all necessary dependencies with: `pip install -r requirements.txt`
 1. Setup PyCharm Python interpreter
    1. Click on "<No interpreter>" in the lower right corner
    2. Click on "Add New Interpreter" -> "Add Local Interpreter..."
