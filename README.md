@@ -14,7 +14,7 @@ In this assignment, you will:
 
 ## Setup
 
-We tested and recommend the following setup: 
+We tested the following setup: 
 - Windows 10/11 (Ubuntu should work as well)
 - Python 3.12
 - CUDA 12.4
@@ -22,28 +22,22 @@ We tested and recommend the following setup:
 - IDE and Markdown Viewer: [PyCharm](https://www.jetbrains.com/pycharm/)
 - Mesh and Point Cloud Viewer: [Meshlab](https://www.meshlab.net/)
 
-If you are familiar with other dependency managers (e.g. Conda) and IDEs (e.g. VS Code, Eclipse), feel free to deviate from these instructions. In the end, only your code and the results count.
-
+If you are familiar with other dependency managers and IDEs (e.g. VS Code, Eclipse), feel free to deviate from these instructions. In the end, only your code and the results count. Note: Pytorch dropped conda support and Pytorch-lightning / Pytorch-geometric don't support Pipenv.
 
 1. Install [PyCharm](https://www.jetbrains.com/pycharm/)
    1. Open this directory in PyCharm (folder, not just a file)
    1. PyCharm will open this Readme with Markdown rendering.
-1. Create the virtual environment with all necessary dependencies. Run this in a terminal in the repo root dir:
-``` bash
-pip install pipenv
-pipenv install
-pipenv shell
-```
+1. Install [Python **3.12** 64 bit](https://www.python.org/downloads/). Do NOT install Python 3.13 since some packages do not support it yet.
+1. Create the virtual environment with: `python -m venv .venv`
+1. Activate the virtual environment in a terminal with a matching script in `.venv\Scripts\`
+   1. Windows Powershell: [Enable script execution via PS with admin rights](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5): `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. Then activate the virtual environment in a normal terminal with `.venv\Scripts\Activate.ps1`.
+   2. Windows CMD: Run `.venv\Scripts\activate.bat`
+   3. Linux: Run `.venv\Scripts\activate`
+1. Install all necessary dependencies with: `pip install -r requirements.txt -f https://data.pyg.org/whl/torch-2.4.0+cu124.html --extra-index-url https://download.pytorch.org/whl/cu124`
 1. Setup PyCharm Python interpreter
    1. Click on "<No interpreter>" in the lower right corner
    2. Click on "Add New Interpreter" -> "Add Local Interpreter..."
-   1. Go to Project: ... -> Python Interpreter
-   2. In "Select existing", Type "Python", Python path scroll down and select: "~\.virtualenvs\ppsurf_modeling..."
-   ![Interpreter](images/interpreter.png)
-
-
-1. When running a Python file, you may encounter File-not-found errors. In this case ensure that the working directory in the run configuration is set to the main directory containing this ReadMe.
-
+   1. Go to Virtualenv Environment -> Existing and select the `python.exe` in `.venv`
 
 
 ## Tasks
@@ -100,7 +94,7 @@ You should get a point cloud like this:
 
 The training uses PyTorch as backend. While training, only a minimal loss information is printed in the console. Additional loss curves and metrics can be seen via Tensorboard:
 1. Open a terminal in the repo root directory.
-1. Activate the virtual environment with "`pipenv shell`".
+1. Activate the virtual environment as described above.
 1. Start Tensorboard server with "`tensorboard --logdir models`".
 1. Open http://localhost:6006/ in a browser. You should see curves like these (smoothing>=0.95):
 ![Tensorboard](images/tensorboard.png)
