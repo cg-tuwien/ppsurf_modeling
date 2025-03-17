@@ -15,7 +15,7 @@ In this assignment, you will:
 ## Setup
 
 We tested the following setup: 
-- Windows 10/11 (Ubuntu should work as well)
+- Windows 10/11 (Linux should work as well)
 - Python 3.12
 - CUDA 12.4
 - Package manager and virtual environment: [Pipenv](https://pipenv.pypa.io/en/latest/) 
