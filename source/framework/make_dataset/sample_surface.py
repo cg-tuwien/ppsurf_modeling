@@ -15,7 +15,7 @@ def run(args):
     num_samples = args.num_samples
     pts: np.ndarray
 
-    # Task 2 Start
+    # TODO: Task 2 Start
     # TODO: get num_samples random points on the surface of input_mesh
     # TODO: use the provided seed for a random number generator
     # RNG: https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.random.html
@@ -25,7 +25,7 @@ def run(args):
     # Be careful if you choose a method based on barycentric coordinates. Getting a uniform distribution there is not trivial.
     pts = np.zeros(1)  # just a placeholder
     raise NotImplementedError('Task 2 is not implemented')  # delete this line when done
-    # Task 2 End
+    # TODO: Task 2 End
 
     # pts must of shape (num_samples, 3)
     if pts.shape[0] != num_samples:

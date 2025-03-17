@@ -10,12 +10,12 @@ def _normalize_mesh(file_in: str, file_out: str):
 
     mesh: trimesh.Trimesh = trimesh.load(file_in)
 
-    # Task 1 Start
+    # TODO: Task 1 Start
     # TODO: normalize the mesh to [-0.5...+0.5]
     # See documentation of Trimesh: https://trimsh.org/trimesh.html#trimesh.Trimesh
     mesh.apply_transform(trimesh.transformations.identity_matrix())  # just a placeholder
     raise NotImplementedError('Task 1 is not implemented')  # delete this line when done
-    # Task 1 End
+    # TODO: Task 1 End
 
     if np.min(mesh.vertices) < -0.5 or np.max(mesh.vertices) > 0.5:
         raise ValueError('Given mesh exceeds the boundaries!')

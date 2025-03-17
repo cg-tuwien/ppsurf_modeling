@@ -1,2 +1,2 @@
-pipenv shell
-tensorboard --logdir="models"
+.\.venv\Scripts\activate
+tensorboard --logdir="logs"

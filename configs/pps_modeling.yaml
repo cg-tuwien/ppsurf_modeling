@@ -38,13 +38,12 @@ data:
     padding_factor: 0.05
     seed: 42
     manifold_points: 10000
-    patches_per_shape: -1
+    patches_per_shape: -1  # default, all (2000)
     do_data_augmentation: True
-    batch_size: 2  # 4 GB GPU memory, 2 GB RAM
-#    batch_size: 10  # 16 GB GPU memory, 10 GB RAM
-    workers: 0
-#    workers: 4
-#    workers: 8
+    batch_size: 10  # default
+#    workers: 0  # single-threaded for debugging
+#    workers: 4  # 8 GB RAM
+    workers: 8  # default, 14 GB RAM
 
 model:
   class_path: source.ppsurf_model.PPSurfModel

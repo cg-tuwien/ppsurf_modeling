@@ -76,7 +76,11 @@ class PocoModel(pl.LightningModule):
         loss_components = []
 
         occ_target = batch_data['occ']
+
+        # TODO: Task 3 Start
         occ_loss = nn.functional.cross_entropy(input=pred, target=occ_target, reduction='none')
+        # TODO: Task 3 End
+
         loss_components.append(occ_loss)
 
         loss_components_mean = [torch.mean(l) for l in loss_components]
