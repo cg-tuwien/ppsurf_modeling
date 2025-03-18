@@ -70,12 +70,16 @@ class PPSProfiler(pytorch_lightning.profilers.PyTorchProfiler):
         sort_by_key: Optional[str] = None,
         record_module_names: bool = True,
         with_stack: bool = False,
-        **profiler_kwargs: Any,
+        **profiler_kwargs: Any,  # can't by used with YAML
     ) -> None:
+        prof_kwargs = {
+            'profile_memory': True,
+            'record_shapes': True,
+        }
         super().__init__(dirpath=dirpath, filename=filename, group_by_input_shapes=group_by_input_shapes,
                          emit_nvtx=emit_nvtx, export_to_chrome=export_to_chrome, row_limit=row_limit,
                          sort_by_key=sort_by_key, record_module_names=record_module_names, with_stack=with_stack,
-                         **profiler_kwargs)
+                         **prof_kwargs)
 
 
 class CLI(LightningCLI):

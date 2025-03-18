@@ -2,7 +2,8 @@ trainer:
   profiler:
     class_path: source.cli.PPSProfiler
     init_args:
-      export_to_chrome: False
+      export_to_chrome: True
       emit_nvtx: False
-      with_stack: False
-
+      with_stack: True
+      group_by_input_shapes: True
+      sort_by_key: 'self_cpu_memory_usage'

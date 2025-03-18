@@ -129,12 +129,25 @@ class PocoModel(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        loss, loss_components_mean, loss_components, metrics_dict = self.default_step_dict(batch=batch)
+        from source.base.profiling import get_duration
+        duration, step_data = get_duration(self.default_step_dict, {'batch': batch})
+        self.log('epoch/val/duration_s', duration, on_step=False, on_epoch=True,
+                 logger=True, batch_size=batch['pts_query_ms'].shape[0])
+
+        from source.base.profiling import get_process_memory_bytes
+        self.log('epoch/val/cpu_mem_gb', get_process_memory_bytes() / 1024 / 1024 / 1024,
+                 on_step=False, on_epoch=True, logger=True, batch_size=batch['pts_query_ms'].shape[0])
+
+        from torch.cuda import memory_allocated
+        self.log('epoch/val/gpu_mem_gb', memory_allocated() / 1024 / 1024 / 1024,
+                 on_step=False, on_epoch=True, logger=True, batch_size=batch['pts_query_ms'].shape[0])
+
+        loss, loss_components_mean, loss_components, metrics_dict = step_data
         self.do_logging(loss, loss_components_mean, log_type='val',
                         output_names=self.output_names, metrics_dict=metrics_dict, f1_in_prog_bar=True,
                         keys_to_log=frozenset({'accuracy', 'precision', 'recall', 'f1_score'}))
         return loss
-
+    
     def test_step(self, batch, batch_idx):
         pred = self.network.forward(batch)
 
