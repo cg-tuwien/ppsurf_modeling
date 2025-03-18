@@ -28,6 +28,10 @@ trainer:
       save_last: True
       save_top_k: 0
       enable_version_counter: False
+  - class_path: ModelSummary
+    init_args:
+      # max_depth: -1
+      max_depth: 2
 
 data:
   class_path: source.ppsurf_data_loader.PPSurfDataModule
@@ -41,9 +45,8 @@ data:
     patches_per_shape: -1  # default, all (2000)
     do_data_augmentation: True
     batch_size: 10  # default
-#    workers: 0  # single-threaded for debugging
-#    workers: 4  # 8 GB RAM
-    workers: 8  # default, 14 GB RAM
+#    workers: 0  # 10 GB RAM single-threaded for debugging
+    workers: 8  # default, 16 GB RAM
 
 model:
   class_path: source.ppsurf_model.PPSurfModel
@@ -60,7 +63,7 @@ model:
     gen_subsample_manifold: 10000
     gen_resolution_global: 129  # half resolution
 #    gen_resolution_global: 257
-    rec_batch_size: 5000
+    rec_batch_size: 10000
 #    rec_batch_size: 25000  # half memory
 #    rec_batch_size: 50000
     gen_refine_iter: 10

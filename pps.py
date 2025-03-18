@@ -23,6 +23,7 @@ class PPSCLI(PocoCLI):
         super().add_arguments_to_parser(parser)
 
         parser.link_arguments('model.init_args.num_pts_local', 'data.init_args.num_pts_local')
+        parser.link_arguments('data.init_args.workers', 'model.init_args.workers')
 
     def handle_rec_subcommand(self, args: typing.List[str]) -> typing.List[str]:
         """Replace 'rec' subcommand with predict and its default parameters.
