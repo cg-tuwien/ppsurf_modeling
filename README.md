@@ -26,15 +26,15 @@ If you are familiar with other dependency managers and IDEs (e.g. VS Code, Eclip
 
 1. Install [PyCharm](https://www.jetbrains.com/pycharm/)
    1. Open this directory in PyCharm (folder, not just a file)
-   1. PyCharm will open this Readme with Markdown rendering.
-1. Install [Python **3.12** 64 bit](https://www.python.org/downloads/). Do NOT install Python 3.13 since some packages do not support it yet.
-1. Create the virtual environment with: `python -m venv .venv`
-1. Activate the virtual environment in a terminal with a matching script in `.venv\Scripts\`
+   2. PyCharm will open this Readme with Markdown rendering.
+2. Install [Python **3.12** 64 bit](https://www.python.org/downloads/). Do NOT install Python 3.13 since some packages do not support it yet.
+3. Create the virtual environment with: `python -m venv .venv`
+4. Activate the virtual environment in a terminal with a matching script in `.venv\Scripts\`
    1. Windows Powershell: Run `.venv\Scripts\Activate.ps1`. If it refuses to execute scripts, you'll need to change a setting via PS with admin rights: [Enable script execution via PS with admin rights](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5): `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. 
    2. Windows CMD: Run `.venv\Scripts\activate.bat`
    3. Linux: Run `.venv\Scripts\activate`
-1. Install all necessary dependencies with: `pip install -r requirements.txt`
-1. Setup PyCharm Python interpreter
+5. Install all necessary dependencies with: `pip install -r requirements.txt`
+6. Setup PyCharm Python interpreter
    1. Click on "\<No interpreter\>" in the lower right corner
    2. Click on "Add New Interpreter" -> "Add Local Interpreter..."
    3. Select the `python.exe` (python binary in Linux)  in `.venv` as interpreter. The easiest way is when the "Generate New" tab (with Virtualenv type) tells you that `.venv` already exists and suggest to use it with "select existing interpreter".
@@ -62,10 +62,10 @@ You can find the dataset files in `datasets/abc_modeling_course/*` and verify th
 
 Deep Learning and other ML techniques work best when the input data is normalized. In the context of reconstruction, we need to normalize the input meshes to unit cube size.
 
-1. Modify the marked code lines in [source/framework/make_dataset/scale_mesh.py](source/framework/make_dataset/scale_mesh.py). The bounding box of output mesh must be in [-0.5...+0.5]^3. 
+1. **Modify the marked code lines in [source/framework/make_dataset/scale_mesh.py](source/framework/make_dataset/scale_mesh.py). The bounding box of output mesh must be in [-0.5...+0.5]^3.**
    1. The output mesh must not be distorted, i.e. use only translation and uniform scaling. 
-   1. Use vectorization of NumPy arrays. Do not iterate over the vertices.
-1. Describe the transformation steps and their order in the report. You will find the meshes as .ply in [datasets/abc_modeling_course/03_meshes](datasets/abc_modeling/03_meshes). You can check the correct scaling by opening them in Meshlab and using the measure tool.
+   2. Use vectorization of NumPy arrays. Do not iterate over the vertices.
+2. **Describe the transformation steps and their order in the report. You will find the meshes as .ply in [datasets/abc_modeling_course/03_meshes](datasets/abc_modeling/03_meshes). You can check the correct scaling by opening them in Meshlab and using the measure tool.**
 
 You should get a scaled mesh like this:
 
@@ -76,15 +76,14 @@ You should get a scaled mesh like this:
 
 For this supervised training, we generate a point cloud from a mesh dataset. This way, we have a ground-truth mesh we can compare the reconstruction to.
 
-Modify the marked code lines in [source/framework/make_dataset/sample_surface.py](source/framework/make_dataset/sample_surface.py). 
-1. For each sample:
+1. **Modify the marked code lines in [source/framework/make_dataset/sample_surface.py](source/framework/make_dataset/sample_surface.py).** For each sample:
    1. select a random face of the mesh. The face probability must be proportional to its size. You may use Trimesh's face area calculation (`mesh.area_faces` property).
    2. calculate a uniformly distributed random position on the selected face.
    3. Use the given seed for a random number generator (NumPy recommended).
-   1. Use vectorization of NumPy arrays. Do NOT iterate over the faces.
-   1. Do NOT use the functions in Trimesh's sample module.
-1. Run the [make_dataset.py](make_dataset.py) to create the dataset for the next task. Outputs are created in `datasets/abc_modeling_course/`.
-1. Describe the sampling process and show some results in your report. You will find the point clouds as .xyz `datasets/abc_modeling_course/04_pts_vis`. Use screenshots of these objects (e.g. opened in Meshlab) for your report. For some reason, opening the .xyz files with Meshlab does not work but drag&drop from the explorer does.
+   4. Use vectorization of NumPy arrays. Do NOT iterate over the faces.
+   5. Do NOT use the functions in Trimesh's sample module.
+2. **Run the [make_dataset.py](make_dataset.py) to create the dataset for the next task. Outputs are created in `datasets/abc_modeling_course/`.**
+3. **Describe the sampling process and show some results in your report. You will find the point clouds as .xyz `datasets/abc_modeling_course/04_pts_vis`. Use screenshots of these objects (e.g. opened in Meshlab) for your report. For some reason, opening the .xyz files with Meshlab does not work but drag&drop from the explorer does.**
 
 You should get a point cloud like this:
 
@@ -100,7 +99,7 @@ Run [pps_modeling.py](pps_modeling.py) to train and evaluate the network. The fu
 
 You can change hyperparameters in [configs/pps_modeling.yaml](configs/pps_modeling.yaml) or overwrite them in [pps_modeling.py](pps_modeling.py). The most important ones are:
 - `trainer.accelerator`: Set to "CPU" if you don't have a supported GPU. Expect around 10x longer training times.
-- `data.batch_size`: Reduce if you run out of GPU memory. Note: Pytorch usually fills almost the whole GPU memory, no matter how much it actually needs. Reducing the batch size will hurt convergence, so you should increase the number of epochs (`trainer.max_epochs` in YAML).
+- `data.batch_size`: Reduce if you run out of GPU memory. Note: Pytorch usually fills almost the whole GPU memory, no matter how much it actually needs. Reducing the batch size will hurt convergence, so you should increase the number of epochs. If your system is using shared memory (check task manager), training will be significantly slower.
 - `data.workers`: Number of workers for data loading. Reduce if you run out of RAM or get a paging file error. Set to `0` for faster debugging on Windows.
 
 While training, only a minimal loss information is printed in the console. Additional loss curves and metrics can be seen via Tensorboard:
@@ -123,10 +122,8 @@ You should get a reconstruction like this:
 
 #### Report
 
-In supervised training, a loss function computes the error between the prediction and the ground-truth (GT) data. A minor change can cause huge differences in accuracy.
-
-1. Run the training and evaluation with the default setup and note the resulting Chamfer distance. Report all changes you made.
-2. Change the loss function in [source/poco_model.py](source/poco_model.py) to something else. Implement your own loss function or try one of [Pytorch](https://pytorch.org/docs/stable/nn.html#loss-functions). Re-train and evaluate the results. Report the differences.
+1. **Run the training and evaluation with the default setup and note the resulting Chamfer distance. Report all changes you made.**
+2. **In supervised training, a loss function computes the error between the prediction and the ground-truth (GT) data. A minor change can cause huge differences in accuracy. Change the loss function in [source/poco_model.py](source/poco_model.py) to something else. Implement your own loss function or try one of [Pytorch](https://pytorch.org/docs/stable/nn.html#loss-functions). Re-train and evaluate the results. Report the differences.**
 
 
 ### Bonus Task 1 (5 Bonus Points): Simulate Scanner Noise
@@ -167,10 +164,8 @@ Submission contents:
    
 ## Trouble Shooting
 
-Pip might fail when creating the environment. If so, try installing the Pip packages from the `requirements.txt` manually.
+Pip might fail when creating the environment. If so, try installing the Pip packages from the `requirements.txt` manually. Reach out to us if you need further help.
 
-On Windows, Pip install may raise a 
-"Microsoft Visual C++ 14.0 or greater is required. 
-Get it with "Microsoft C++ Build Tools" error. 
-In this case, install the MS Visual Studio build tools, 
-as described on [Stackoverflow](https://stackoverflow.com/questions/64261546/how-to-solve-error-microsoft-visual-c-14-0-or-greater-is-required-when-inst).
+On Windows, Pip install may raise this error:
+'Microsoft Visual C++ 14.0 or greater is required. Get it with "Microsoft C++ Build Tools" error. 
+In this case, install the MS Visual Studio build tools, as described on [Stackoverflow](https://stackoverflow.com/questions/64261546/how-to-solve-error-microsoft-visual-c-14-0-or-greater-is-required-when-inst).
