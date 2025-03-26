@@ -83,7 +83,7 @@ For this supervised training, we generate a point cloud from a mesh dataset. Thi
    4. Use vectorization of NumPy arrays. Do NOT iterate over the faces.
    5. Do NOT use the functions in Trimesh's sample module.
 2. **Run the [make_dataset.py](make_dataset.py) to create the dataset for the next task. Outputs are created in `datasets/abc_modeling_course/`.**
-3. **Describe the sampling process and show some results in your report. You will find the point clouds as .xyz `datasets/abc_modeling_course/04_pts_vis`. Use screenshots of these objects (e.g. opened in Meshlab) for your report. For some reason, opening the .xyz files with Meshlab does not work but drag&drop from the explorer does.**
+3. **Describe the sampling process and show some results in your report. You will find the point clouds as .xyz `datasets/abc_modeling_course/04_pts_vis`. Use screenshots of these objects (e.g. opened in Meshlab) for your report.**
 
 You should get a point cloud like this:
 
@@ -104,9 +104,8 @@ You can change hyperparameters in [configs/pps_modeling.yaml](configs/pps_modeli
 
 While training, only a minimal loss information is printed in the console. Additional loss curves and metrics can be seen via Tensorboard:
 1. Start Tensorboard server with `start_tensorboard.bat` (Windows) or `start_tensorboard.sh` (Linux).
-2. Open http://localhost:6006/ in a browser. You should see curves like these:
+2. Open http://localhost:6006/ in a browser. Use these curves for your report. You should see curves like these:
 ![Tensorboard](images/tensorboard.png)
-Use these curves for your report.
 
 
 #### Evaluation
@@ -122,8 +121,11 @@ You should get a reconstruction like this:
 
 #### Report
 
-1. **Run the training and evaluation with the default setup and note the resulting Chamfer distance. Report all changes you made.**
-2. **In supervised training, a loss function computes the error between the prediction and the ground-truth (GT) data. A minor change can cause huge differences in accuracy. Change the loss function in [source/poco_model.py](source/poco_model.py) to something else. Implement your own loss function or try one of [Pytorch](https://pytorch.org/docs/stable/nn.html#loss-functions). Re-train and evaluate the results. Report the differences.**
+1. **Run the training and evaluation with the default setup and note. Report**
+   1. all the changes you made. 
+   2. mean Chamfer distance and F1-Scores from the result XLSX.
+   3. training and validation loss curves. 
+2. **In supervised training, a loss function computes the error between the prediction and the ground-truth (GT) data. A minor change can cause huge differences in accuracy. Change the loss function in [source/poco_model.py](source/poco_model.py) to something else. Implement your own loss function or try one of [Pytorch](https://pytorch.org/docs/stable/nn.html#loss-functions). Re-train and evaluate the results. Report the differences and explain why you chose this loss function.**
 
 
 ### Bonus Task 1 (5 Bonus Points): Simulate Scanner Noise
