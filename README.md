@@ -41,12 +41,12 @@ If you use *PyCharm*, setup the interpreter:
 1. Select the `python.exe` (python binary in Linux)  in `.venv` as interpreter. The easiest way is when the "Generate New" tab (with Virtualenv type) tells you that `.venv` already exists and suggest to use it with "select existing interpreter".
 1. You should see "Python 3.12 virtualenv at [PATH]\ppsurf_modeling\.venv" in the lower right corner now.
 
-If you use *Visual Code*, we recomend to install the [Python Environment Manager](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-environment-manager). You will then find the environment under `Workspace Envs` and can set it as the active workspace interpreter.
+If you use *VS Code*, we recomend to install the [Python Environment Manager](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-environment-manager). You will then find the environment under `Workspace Envs` and can set it as the active workspace interpreter.
 
 
 ## Tasks
 
-### Task 1 (8 Points): Data Normalization
+### Task 1 (5 Points): Data Normalization
 
 The dataset generation is run in a multi-processing framework. You can still debug the processing steps like normal code. Any unhandled errors will stop the system and print the stack traces in the console. You can set the number of worker processes in the `worker_processes` parameter in `make_dataset.py`. To start the dataset generation, open the `make_dataset.py` and start it (PyCharm defaults: F5 for debugging, Shift+F5 for run without debugger; then select a python file). You can always get debug outputs of Trimesh meshes with `mesh.export('debug.ply')`. This also works in the watch window while debugging. The framework skips processing steps when the outputs exist and are up-to-date. Therefore, you need to clean output directories manually after changing the relevant code. Further, you will encounter error messages of tasks that you didn't tackle yet.
 
@@ -93,7 +93,7 @@ You should get a point cloud like this:
 ![Point Cloud](images/pc.png)
 
 
-### Task 3 (10 Points): Train and Evaluate the Network
+### Task 3 (13 Points): Train and Evaluate the Network
 
 
 #### Training
