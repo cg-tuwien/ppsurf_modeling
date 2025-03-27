@@ -2,22 +2,33 @@ debug: False
 seed_everything: 42
 
 trainer:
-#  max_epochs: 10  # 3 min
-#  max_epochs: 50  # 6 min
-  max_epochs: 150  # 15 min
-  default_root_dir: 'models/pps_modeling'
-  strategy: auto
-  accelerator: gpu
-#  accelerator: cpu
-  devices: -1
-  precision: 16-mixed
+
+  # TODO: Task 3: Try to train the model for different number of epochs. If you change the number of epochs,
+  # make sure to also change the learning rate scheduler milestones accordingly. The milestones are the epochs
+  # at which the learning rate is reduced by the factor gamma. We provided some examples for different numbers
+  # of epochs and the corresponding milestones. You can also try different numbers of epochs and milestones.
+
+  #max_epochs: 10 # sched: 8 [3 min RTX3060]
+  max_epochs: 50 # sched: 45,48 [10 min RTX3060]
+  #max_epochs: 75 # sched: 55, 70 [20 min RTX3060]
+  #max_epochs: 150  # sched: 75, 125 [30 min RTX3060]
+
+  # HINT: If you change the accelerator to 'cpu', you can expect magnitutes of slower training times. To stay sane
+  # during this assignment, we recommend to look for a workstation with a GPU! Contact your supervisor if you need
+  # help with that.
+  accelerator: gpu # cpu
+  devices: -1 # Keep at 1 for CPU, -1 for GPU
+  precision: 16-mixed # 32-true for CPU, 16-mixed for GPU
+  strategy: auto # ddp_spawn for CPU, auto for GPU
+
+  default_root_dir: 'models/pps_modeling' # gets overwritten by pps_modeling.py
   num_sanity_val_steps: 0
   log_every_n_steps: 1
   logger:
     class_path: pytorch_lightning.loggers.TensorBoardLogger
     init_args:
       save_dir: 'models'
-      version: 'alpha'
+      version: 'alpha' # don't change! change name in pps_modeling.py instead
   callbacks:
   - class_path: source.cli.PPSProgressBar
   - class_path: LearningRateMonitor
@@ -37,15 +48,19 @@ data:
   class_path: source.ppsurf_data_loader.PPSurfDataModule
   init_args:
     use_ddp: False
-    in_file: datasets/abc_modeling/testset.txt  # small dataset
-#    in_file: datasets/abc_train/testset.txt  # full dataset
+    in_file: datasets/abc_modeling/testset.txt
     padding_factor: 0.05
     seed: 42
     manifold_points: 10000
-    patches_per_shape: -1  # default, all (2000)
+    patches_per_shape: -1  # default, all
     do_data_augmentation: True
-    batch_size: 10  # default
-#    workers: 0  # 10 GB RAM single-threaded for debugging
+    # TODO: Task 3: Make sure to adjust the batch size according to the available memory of your GPU.
+    # If shared GPU memory is used the training speed will decrease significantly!
+    #batch_size: 6 # bei 12GB VRAM [not necessarily speed increase]
+    batch_size: 4 # bei 8GB VRAM
+    # TODO: Task 3: Make sure you'll adjust the number of workers according to the available CPU cores and memory.
+    # The execution will crash if the number of workers is too high for the available memory.
+    #workers: 0  # 10 GB RAM single-threaded for debugging
     workers: 8  # default, 16 GB RAM
 
 model:
@@ -87,7 +102,8 @@ optimizer:
 lr_scheduler:
   class_path: torch.optim.lr_scheduler.MultiStepLR
   init_args:
+    # TODO: Task 3: Adapt the milestones according to the number of epochs you chose.
     milestones:
-    - 75
-    - 125
+    - 45
+    - 48
     gamma: 0.1

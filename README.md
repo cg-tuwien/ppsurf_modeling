@@ -16,29 +16,32 @@ In this assignment, you will:
 
 We tested the following setup: 
 - Windows 10/11 (Linux should work as well)
-- Python 3.12
+- Python 3.12 or Python 3.11.9
 - CUDA 12.4
 - Package manager and virtual environment: [Pipenv](https://pipenv.pypa.io/en/latest/) 
-- IDE and Markdown Viewer: [PyCharm](https://www.jetbrains.com/pycharm/)
+- IDE and Markdown Viewer: [PyCharm](https://www.jetbrains.com/pycharm/) or [Visual Code](https://code.visualstudio.com/download)
 - Mesh and Point Cloud Viewer: [Meshlab](https://www.meshlab.net/)
 
-If you are familiar with other dependency managers and IDEs (e.g. VS Code, Eclipse), feel free to deviate from these instructions. In the end, only your code and the results count. Note: Pytorch dropped conda support and Pytorch-lightning / Pytorch-geometric don't support Pipenv.
+If you are familiar with other dependency managers and IDEs (e.g. Eclipse), feel free to deviate from these instructions. In the end, only your code and the results count. Note: Pytorch dropped conda support and Pytorch-lightning / Pytorch-geometric don't support Pipenv.
 
 1. Install [PyCharm](https://www.jetbrains.com/pycharm/)
    1. Open this directory in PyCharm (folder, not just a file)
-   2. PyCharm will open this Readme with Markdown rendering.
-2. Install [Python **3.12** 64 bit](https://www.python.org/downloads/). Do NOT install Python 3.13 since some packages do not support it yet.
-3. Create the virtual environment with: `python -m venv .venv`
-4. Activate the virtual environment in a terminal with a matching script in `.venv\Scripts\`
+   1. PyCharm will open this Readme with Markdown rendering.
+1. Install [Python **3.12** 64 bit](https://www.python.org/downloads/). Do NOT install Python 3.13 since some packages do not support it yet.
+1. Create the virtual environment with: `python -m venv .venv`
+1. Activate the virtual environment in a terminal with a matching script in `.venv\Scripts\`
    1. Windows Powershell: Run `.venv\Scripts\Activate.ps1`. If it refuses to execute scripts, you'll need to change a setting via PS with admin rights: [Enable script execution via PS with admin rights](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5): `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. 
-   2. Windows CMD: Run `.venv\Scripts\activate.bat`
-   3. Linux: Run `.venv\Scripts\activate`
-5. Install all necessary dependencies with: `pip install -r requirements.txt`
-6. Setup PyCharm Python interpreter
-   1. Click on "\<No interpreter\>" in the lower right corner
-   2. Click on "Add New Interpreter" -> "Add Local Interpreter..."
-   3. Select the `python.exe` (python binary in Linux)  in `.venv` as interpreter. The easiest way is when the "Generate New" tab (with Virtualenv type) tells you that `.venv` already exists and suggest to use it with "select existing interpreter".
-   4. You should see "Python 3.12 virtualenv at [PATH]\ppsurf_modeling\.venv" in the lower right corner now.
+   1. Windows CMD: Run `.venv\Scripts\activate.bat`
+   1. Linux: Run `.venv\Scripts\activate`
+1. Install all necessary dependencies with: `pip install -r requirements.txt`
+
+If you use *PyCharm*, setup the interpreter:
+1. Click on "\<No interpreter\>" in the lower right corner
+1. Click on "Add New Interpreter" -> "Add Local Interpreter..."
+1. Select the `python.exe` (python binary in Linux)  in `.venv` as interpreter. The easiest way is when the "Generate New" tab (with Virtualenv type) tells you that `.venv` already exists and suggest to use it with "select existing interpreter".
+1. You should see "Python 3.12 virtualenv at [PATH]\ppsurf_modeling\.venv" in the lower right corner now.
+
+If you use *Visual Code*, we recomend to install the [Python Environment Manager](https://marketplace.visualstudio.com/items?itemName=donjayamanne.python-environment-manager). You will then find the environment under `Workspace Envs` and can set it as the active workspace interpreter.
 
 
 ## Tasks
