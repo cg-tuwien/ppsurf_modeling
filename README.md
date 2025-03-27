@@ -131,7 +131,7 @@ You should get a reconstruction like this:
 2. **In supervised training, a loss function computes the error between the prediction and the ground-truth (GT) data. A minor change can cause huge differences in accuracy. Change the loss function in [source/poco_model.py](source/poco_model.py) to something else. Implement your own loss function or try one of [Pytorch](https://pytorch.org/docs/stable/nn.html#loss-functions). Re-train and evaluate the results. Report the differences and explain why you chose this loss function.**
 
 
-### Bonus Task 1 (5 Bonus Points): Simulate Scanner Noise
+### Bonus Task Noise (3 Bonus Points)
 
 To get a more realistic dataset, we want to simulate scanner noise. An easy solution is to extend the point sampling method (Task 2) with a random offset in normal direction:
 1. Backup your previous dataset and clean the `04_pts` and `04_pts_vis` directories.
@@ -142,7 +142,13 @@ To get a more realistic dataset, we want to simulate scanner noise. An easy solu
 5. Explain your implementation and show the resulting changes in accuracy (with different noise strengths).
 
 
-### Bonus Task 2 (X Bonus Points): Free Experimentation
+### Bonus Task Classic Reconstruction (3 Bonus Points)
+
+Is data-driven reconstruction better than classic methods? Compare the results with a classic method like Poisson reconstruction, VCG, and Ball pivoting. You can use e.g. Meshlab manually or [scripted](https://pymeshlab.readthedocs.io/en/latest/) for this task. Note that Poisson Reconstruction requires point normals which you can either calculate with the dataset generation or estimate with a Meshlab filter.
+Compare the quality and runtime of the chosen methods.
+
+
+### Bonus Task Free Experimentation (X Bonus Points)
 
 Want to try more loss functions? A different network architecture? More realistic noise simulation? A bigger, more/less specialized dataset? Another data augmentation variant?
 Go for it! Send us a message (email or TUWEL) so we can discuss the scope and grading of your idea, and we likely can give some help.
