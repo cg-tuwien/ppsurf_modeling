@@ -14,6 +14,8 @@ In this assignment, you will:
 
 ## Setup
 
+You may use this [Google Colab notebook](https://colab.research.google.com/drive/1558rCsz7N1L7xsmnbaI6TX8XGUwLQwBP?usp=sharing) instead of a local setup. The free T4 runtime is sufficient but rather slow with approx. 30 min per epoch.
+
 We tested the following setup: 
 - Windows 10/11 (Linux should work as well)
 - Python 3.12 or Python 3.11.9
