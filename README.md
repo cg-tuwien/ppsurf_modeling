@@ -182,3 +182,8 @@ Pip might fail when creating the environment. If so, try installing the Pip pack
 On Windows, Pip install may raise this error:
 'Microsoft Visual C++ 14.0 or greater is required. Get it with "Microsoft C++ Build Tools" error. 
 In this case, install the MS Visual Studio build tools, as described on [Stackoverflow](https://stackoverflow.com/questions/64261546/how-to-solve-error-microsoft-visual-c-14-0-or-greater-is-required-when-inst).
+
+Installing PySDF with Pip might fail with the error that `high_resolution_clock` is missing. See [MS STL](https://github.com/microsoft/STL/pull/5105) for more details. In this case:
+1. [Download the package from PyPi](https://pypi.org/project/pysdf/#files)
+2. Add `#include <chrono>` to `include/sdf/internal/sdf_util.hpp`
+3. Re-zip the package and install it with `pip install <filename>.zip`.
