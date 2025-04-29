@@ -184,6 +184,11 @@ On Windows, Pip install may raise this error:
 In this case, install the MS Visual Studio build tools, as described on [Stackoverflow](https://stackoverflow.com/questions/64261546/how-to-solve-error-microsoft-visual-c-14-0-or-greater-is-required-when-inst).
 
 Installing PySDF with Pip might fail with the error that `high_resolution_clock` is missing. See [MS STL](https://github.com/microsoft/STL/pull/5105) for more details. In this case:
+1. Open the `requirements.txt`
+2. Remove the line `pysdf==0.1.9`
+3. Add the line `pysdf @ https://vapor.cg.tuwien.ac.at/index.php/s/cPwtcBB95pmLDYw/download/pysdf-0.1.9.tar.gz`
+
+If you want to fix it manually:
 1. [Download the package from PyPi](https://pypi.org/project/pysdf/#files)
 2. Add `#include <chrono>` to `include/sdf/internal/sdf_util.hpp`
 3. Re-zip the package and install it with `pip install <filename>.zip`.
