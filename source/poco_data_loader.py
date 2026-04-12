@@ -377,9 +377,9 @@ class PocoDataset(torch_data.Dataset, EnforceOverrides):
             if imp_surf_dist_ms.dtype != np.float32:
                 imp_surf_dist_ms = imp_surf_dist_ms.astype(np.float32)
         else:  # if no GT data
-            # pts_query_ms = np.empty((0, 3), dtype=np.float32)
-            # imp_surf_dist_ms = np.empty((0, 3), dtype=np.float32)
-            raise ValueError(f'No GT data for {shape_name}')
+            pts_query_ms = np.empty((0, 3), dtype=np.float32)
+            imp_surf_dist_ms = np.empty((0, 3), dtype=np.float32)
+            # raise ValueError(f'No GT data for {shape_name}')
 
         # DDP sampler can't handle patches_per_shape, so we do it here
         from torch.cuda import device_count

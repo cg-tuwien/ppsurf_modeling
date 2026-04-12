@@ -197,7 +197,7 @@ class OccupancyDataModule(LightningDataModule, ABC):
             pts = load_xyz(pts_file)
         elif file_ext in ['.stl', '.ply', '.obj', 'gltf', '.glb', '.dae', '.off', '.ctm', '.3dxml']:
             import trimesh
-            trimesh_obj: typing.Union[trimesh.Scene, trimesh.Trimesh] = trimesh.load_mesh(file_obj=pts_file)
+            trimesh_obj: typing.Union[trimesh.Scene, trimesh.Trimesh] = trimesh.load(file_obj=pts_file)
             if isinstance(trimesh_obj, trimesh.Scene):
                 mesh: trimesh.Trimesh = trimesh_obj.geometry.items()[0]
             elif isinstance(trimesh_obj, trimesh.Trimesh):
